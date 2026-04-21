@@ -1,0 +1,25 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GradeMate", "GradeMate.csproj", "{64E7536D-B618-43CD-AA3E-BEB6A150527D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{64E7536D-B618-43CD-AA3E-BEB6A150527D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64E7536D-B618-43CD-AA3E-BEB6A150527D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64E7536D-B618-43CD-AA3E-BEB6A150527D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64E7536D-B618-43CD-AA3E-BEB6A150527D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2A3FF996-7509-42BC-8BB3-1ADA566D5914}
+	EndGlobalSection
+EndGlobal
