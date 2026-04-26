@@ -12,10 +12,102 @@ namespace GradeMate
 {
     public partial class Form1 : Form
     {
+        private readonly Color _backgroundColor = Color.FromArgb(235, 244, 255);
+        private readonly Color _panelColor = Color.FromArgb(223, 236, 252);
+        private readonly Color _primaryColor = Color.FromArgb(33, 110, 196);
+        private readonly Color _primaryTextColor = Color.FromArgb(25, 63, 110);
+
         public Form1()
         {
             InitializeComponent();
             this.Text = "GradeMate - Калькулятор оценок";
+            ApplyBlueTheme();
+            tabControl1.SelectedIndexChanged += TabControl1_SelectedIndexChanged;
+            UpdateAcceptButton();
+        }
+
+        private void ApplyBlueTheme()
+        {
+            BackColor = _backgroundColor;
+            ForeColor = _primaryTextColor;
+            StartPosition = FormStartPosition.CenterScreen;
+            MinimumSize = new Size(560, 440);
+            Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+
+            tabControl1.Padding = new Point(16, 8);
+            tabControl1.Appearance = TabAppearance.Normal;
+            tabControl1.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
+
+            foreach (TabPage tabPage in tabControl1.TabPages)
+            {
+                tabPage.BackColor = _panelColor;
+                tabPage.ForeColor = _primaryTextColor;
+                tabPage.Padding = new Padding(16);
+                StyleControls(tabPage.Controls);
+            }
+
+            tabPageCurrentGrade.Text = "Текущая оценка";
+            tabPageDesiredSoch.Text = "Прогноз СОЧ";
+            tabPageMesk.Text = "МЭСК (ВСО)";
+
+            lblCurrentPercentage.ForeColor = _primaryColor;
+            lblCurrentGrade.ForeColor = _primaryColor;
+            lblMinSochNeeded.ForeColor = _primaryColor;
+            lblMeskNeeded.ForeColor = _primaryColor;
+        }
+
+        private void StyleControls(Control.ControlCollection controls)
+        {
+            foreach (Control control in controls)
+            {
+                if (control is Button button)
+                {
+                    button.BackColor = _primaryColor;
+                    button.ForeColor = Color.White;
+                    button.FlatStyle = FlatStyle.Flat;
+                    button.FlatAppearance.BorderSize = 0;
+                    button.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point);
+                    button.Cursor = Cursors.Hand;
+                    button.Height = 36;
+                }
+                else if (control is TextBox textBox)
+                {
+                    textBox.BackColor = Color.White;
+                    textBox.ForeColor = _primaryTextColor;
+                    textBox.BorderStyle = BorderStyle.FixedSingle;
+                    textBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+                }
+                else if (control is Label label)
+                {
+                    label.ForeColor = _primaryTextColor;
+                }
+
+                if (control.HasChildren)
+                {
+                    StyleControls(control.Controls);
+                }
+            }
+        }
+
+        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateAcceptButton();
+        }
+
+        private void UpdateAcceptButton()
+        {
+            if (tabControl1.SelectedTab == tabPageCurrentGrade)
+            {
+                AcceptButton = btnCalculateCurrentGrade;
+            }
+            else if (tabControl1.SelectedTab == tabPageDesiredSoch)
+            {
+                AcceptButton = btnCalculateDesiredSoch;
+            }
+            else
+            {
+                AcceptButton = btnCalculateMeskGrade;
+            }
         }
 
         private void CalculateCurrentGrade_Click(object sender, EventArgs e)
