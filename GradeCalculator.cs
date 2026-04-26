@@ -191,5 +191,70 @@ namespace GradeMate
             else if (meskPercentageNeeded >= 25) return "D";
             else return "E";
         }
+
+        public static int ConvertMeskLetterToGrade(string meskLetter)
+        {
+            if (string.IsNullOrWhiteSpace(meskLetter))
+            {
+                throw new ArgumentException("MESC letter cannot be empty.");
+            }
+
+            string normalizedLetter = meskLetter.Trim().ToUpperInvariant();
+            return normalizedLetter switch
+            {
+                "A" => 5,
+                "A*" => 5,
+                "B" => 4,
+                "C" => 4,
+                "D" => 3,
+                "E" => 3,
+                "U" => 2,
+                _ => throw new ArgumentException("MESC letter must be one of: A, A*, B, C, D, E, U.")
+            };
+        }
+
+        public static Tuple<double, int> CalculateFinalGradeFromAnnualAndMesk(int annualGrade, string meskLetter)
+        {
+            if (annualGrade < 2 || annualGrade > 5)
+            {
+                throw new ArgumentOutOfRangeException("Annual grade must be in range from 2 to 5.");
+            }
+
+            int meskNumericGrade = ConvertMeskLetterToGrade(meskLetter);
+            double weightedResult = annualGrade * 0.6 + meskNumericGrade * 0.4;
+            int finalGrade = (int)Math.Round(weightedResult, MidpointRounding.AwayFromZero);
+
+            return Tuple.Create(weightedResult, Math.Min(5, Math.Max(2, finalGrade)));
+        }
+
+        public static string CalculatePointsToNextGradeHint(double sorScore, double sochScore, double maxSorScore, double maxSochScore)
+        {
+            var current = CalculateCurrentGrade(sorScore, sochScore, maxSorScore, maxSochScore);
+            int currentGrade = current.Item2;
+            double currentPercentage = current.Item1;
+
+            if (currentGrade >= 5)
+            {
+                return "Отлично! У вас уже максимальная оценка (5).";
+            }
+
+            int nextGrade = currentGrade + 1;
+            double targetPercentage = _gradeThresholds[nextGrade].Item1;
+            double percentageNeeded = targetPercentage - currentPercentage;
+            double additionalSochPoints = (percentageNeeded / 50.0) * maxSochScore;
+            double remainingSochCapacity = maxSochScore - sochScore;
+
+            if (additionalSochPoints <= 0)
+            {
+                return $"До следующей оценки ({nextGrade}) осталось 0 баллов.";
+            }
+
+            if (additionalSochPoints > remainingSochCapacity)
+            {
+                return $"До оценки {nextGrade} не хватает {additionalSochPoints:F2} балла(ов) СОЧ, но максимум можно добрать только {remainingSochCapacity:F2}.";
+            }
+
+            return $"До оценки {nextGrade} осталось {additionalSochPoints:F2} балла(ов) по СОЧ.";
+        }
     }
 }
