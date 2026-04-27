@@ -19,6 +19,7 @@ namespace GradeMate
         private readonly Color _primaryTextColor = Color.FromArgb(25, 63, 110);
         private Label lblNextGradeHint;
         private Label lblMeskFormula;
+        private Label lblMeskMapping;
         private Button btnAddScenario;
         private ListBox lstMeskScenarios;
 
@@ -27,6 +28,7 @@ namespace GradeMate
             InitializeComponent();
             this.Text = "GradeMate - Калькулятор оценок";
             ApplyBlueTheme();
+            SetupAlignedLayouts();
             SetupCurrentGradeEnhancements();
             SetupMeskTab();
             tabControl1.SelectedIndexChanged += TabControl1_SelectedIndexChanged;
@@ -121,7 +123,7 @@ namespace GradeMate
             lblNextGradeHint = new Label
             {
                 AutoSize = true,
-                Location = new Point(20, 295),
+                Location = new Point(32, 305),
                 ForeColor = _primaryTextColor,
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Italic, GraphicsUnit.Point),
                 Text = "Подсказка: заполните поля для расчета."
@@ -130,16 +132,54 @@ namespace GradeMate
             tabPageCurrentGrade.Controls.Add(lblNextGradeHint);
         }
 
+        private void SetupAlignedLayouts()
+        {
+            // Текущая оценка
+            int leftLabel = 32;
+            int leftInput = 210;
+            label1.Location = new Point(leftLabel, 30);
+            txtSorScore.Location = new Point(leftInput, 27);
+            label2.Location = new Point(leftLabel, 68);
+            txtMaxSorScore.Location = new Point(leftInput, 65);
+            label3.Location = new Point(leftLabel, 106);
+            txtSochScore.Location = new Point(leftInput, 103);
+            label4.Location = new Point(leftLabel, 144);
+            txtMaxSochScore.Location = new Point(leftInput, 141);
+            btnCalculateCurrentGrade.Location = new Point(leftLabel, 185);
+            btnCalculateCurrentGrade.Size = new Size(160, 36);
+            label5.Location = new Point(leftLabel, 248);
+            lblCurrentPercentage.Location = new Point(leftInput, 245);
+            label6.Location = new Point(leftLabel, 282);
+            lblCurrentGrade.Location = new Point(leftInput, 279);
+
+            // Прогноз СОЧ
+            label8.Location = new Point(leftLabel, 30);
+            txtSorScoreDesired.Location = new Point(leftInput, 27);
+            label9.Location = new Point(leftLabel, 68);
+            txtMaxSorScoreDesired.Location = new Point(leftInput, 65);
+            label10.Location = new Point(leftLabel, 106);
+            txtMaxSochScoreDesired.Location = new Point(leftInput, 103);
+            label11.Location = new Point(leftLabel, 144);
+            txtDesiredGrade.Location = new Point(leftInput, 141);
+            btnCalculateDesiredSoch.Location = new Point(leftLabel, 188);
+            btnCalculateDesiredSoch.Size = new Size(160, 36);
+            label12.Location = new Point(leftLabel, 248);
+            lblMinSochNeeded.Location = new Point(leftInput, 245);
+        }
+
         private void SetupMeskTab()
         {
             label13.Text = "Годовая оценка:";
-            label14.Text = "Результат МЭСК (A/A*/B/C/D/E/U):";
+            label14.Text = "Результат МЭСК:";
             label18.Text = "Итоговая оценка:";
             btnCalculateMeskGrade.Text = "Рассчитать итог";
 
-            txtQuarter1.Location = new Point(250, txtQuarter1.Location.Y);
-            txtQuarter2.Location = new Point(250, txtQuarter2.Location.Y);
-            lblMeskNeeded.Location = new Point(250, lblMeskNeeded.Location.Y);
+            int leftLabel = 32;
+            int leftInput = 250;
+            label13.Location = new Point(leftLabel, 36);
+            txtQuarter1.Location = new Point(leftInput, 33);
+            label14.Location = new Point(leftLabel, 76);
+            txtQuarter2.Location = new Point(leftInput, 73);
 
             label15.Visible = false;
             label16.Visible = false;
@@ -148,29 +188,45 @@ namespace GradeMate
             txtQuarter4.Visible = false;
             txtDesiredFinalGradeMesk.Visible = false;
 
+            lblMeskMapping = new Label
+            {
+                AutoSize = true,
+                Location = new Point(leftLabel, 108),
+                ForeColor = _primaryTextColor,
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point),
+                Text = "Шкала: 5=A/A*, 4=B/C, 3=D/E, 2=U"
+            };
+            tabPageMesk.Controls.Add(lblMeskMapping);
+
             lblMeskFormula = new Label
             {
                 AutoSize = true,
-                Location = new Point(20, 140),
+                Location = new Point(leftLabel, 132),
                 ForeColor = _primaryTextColor,
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Italic, GraphicsUnit.Point),
                 Text = "Формула: итог = годовая × 0.6 + МЭСК × 0.4"
             };
             tabPageMesk.Controls.Add(lblMeskFormula);
 
+            btnCalculateMeskGrade.Location = new Point(leftLabel, 168);
+            btnCalculateMeskGrade.Size = new Size(160, 36);
+
             btnAddScenario = new Button
             {
-                Location = new Point(200, 200),
+                Location = new Point(220, 168),
                 Size = new Size(160, 36),
                 Text = "Добавить сценарий"
             };
             btnAddScenario.Click += AddScenario_Click;
             tabPageMesk.Controls.Add(btnAddScenario);
 
+            label18.Location = new Point(leftLabel, 222);
+            lblMeskNeeded.Location = new Point(leftInput, 220);
+
             lstMeskScenarios = new ListBox
             {
-                Location = new Point(20, 245),
-                Size = new Size(430, 70),
+                Location = new Point(leftLabel, 252),
+                Size = new Size(400, 64),
                 Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point)
             };
             tabPageMesk.Controls.Add(lstMeskScenarios);
